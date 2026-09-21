@@ -12,18 +12,22 @@ function App() {
       
       <hr />
 
-      {/* Componente de Autenticación y Subida de Archivos */}
-      <AuthStorage />
+      {/* Componente para listar los productos */}
+       <ListaProductos />
 
-      <hr className="my-5" />
+       <hr className="my-5" />
 
       {/* Componente para agregar productos */}
       <FormularioProducto />
 
       <hr className="my-5" />
 
-      {/* Componente para listar los productos */}
-      <ListaProductos />
+       {/* Componente de Autenticación y Subida de Archivos */}
+      <AuthStorage />
+
+
+
+
       
     </div>
   );

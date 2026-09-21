@@ -1,54 +1,85 @@
 import React, { Component } from 'react';
-import Producto from './Producto';
+import SimpleReactValidator from 'simple-react-validator';
+import { db } from '../firebase';
 
-class ListaProductos extends Component {
+class FormularioProducto extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productos: [
-        { id: 1, nombre: 'Teclado Mecánico RGB', precio: 45000 },
-        { id: 2, nombre: 'Mouse Inalámbrico Gamer', precio: 28000 },
-        { id: 3, nombre: 'Monitor 24" FHD', precio: 115000 }
-      ],
-      carrito: []
+      nombre: '',
+      precio: ''
     };
+    
+    this.validator = new SimpleReactValidator({
+      autoForceUpdate: this,
+      messages: {
+        required: 'Este campo es obligatorio.',
+        alpha_space: 'Solo se permiten letras y espacios.',
+        numeric: 'Debe ingresar un valor numérico.'
+      }
+    });
   }
 
-  handleAgregarAlCarrito = (productoSeleccionado) => {
-    this.setState((prevState) => ({
-      carrito: [...prevState.carrito, productoSeleccionado]
-    }));
-  }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    if (this.validator.allValid()) {
+      db.collection('productos')
+        .add({
+          nombre: this.state.nombre,
+          precio: parseFloat(this.state.precio),
+          fechaCreacion: new Date()
+        })
+        .then(() => {
+          alert('Producto registrado exitosamente en Firestore Database');
+          this.setState({ nombre: '', precio: '' });
+          this.validator.hideMessages();
+        })
+        .catch((error) => {
+          console.error('Error al guardar en Firestore:', error);
+        });
+    } else {
+      this.validator.showMessages();
+    }
+  };
 
   render() {
     return (
       <div>
-        <h2>Ejercicio 1: Lista de Productos y Carrito</h2>
-        <div>
-          {this.state.productos.map((prod) => (
-            <Producto
-              key={prod.id}
-              producto={prod}
-              onAgregarAlCarrito={this.handleAgregarAlCarrito}
+        <h2>Ejercicio 2: Formulario con Validación y Firestore</h2>
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <label>Nombre:</label>
+            <input 
+              type="text" 
+              name="nombre" 
+              value={this.state.nombre} 
+              onChange={this.handleChange} 
             />
-          ))}
-        </div>
-        <hr />
-        <h4>Carrito de Compras ({this.state.carrito.length} ítems)</h4>
-        {this.state.carrito.length === 0 ? (
-          <p>El carrito está vacío.</p>
-        ) : (
-          <ul>
-            {this.state.carrito.map((item, index) => (
-              <li key={index}>
-                {item.nombre} <span>${item.precio}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+            {this.validator.message('nombre', this.state.nombre, 'required|alpha_space')}
+          </div>
+          
+          <div>
+            <label>Precio:</label>
+            <input 
+              type="text" 
+              name="precio" 
+              value={this.state.precio} 
+              onChange={this.handleChange} 
+            />
+            {this.validator.message('precio', this.state.precio, 'required|numeric')}
+          </div>
+
+          <button type="submit">Guardar Producto</button>
+        </form>
       </div>
     );
   }
 }
 
-export default ListaProductos;
+export default FormularioProducto;
