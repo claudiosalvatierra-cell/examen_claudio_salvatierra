@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["https://enchanting-pudding-894277.netlify.app", "http://localhost:3000"],
+    "method": ["GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"],
+    "maxAgeSeconds": 3600
+  }
+]
