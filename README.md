@@ -134,7 +134,7 @@ Abre [http://localhost:3000](https://www.google.com/url?sa=E&amp;q=http%3A%2F%2F
 
 El proyecto ha sido desplegado de forma continua en **Netlify**:
 
-* 🔗 **Enlace a la Aplicación Web:** `https://tu-proyecto-examen.netlify.app`
+* 🔗 **Enlace a la Aplicación Web:** `https://enchanting-pudding-894277.netlify.app/`
 * 🔗 **Repositorio en GitHub:** `https://github.com/claudiosalvatierra-cell/examen_claudio_salvatierra`
 
 Para generar la versión optimizada de producción utilizada por Netlify:
